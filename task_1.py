@@ -1,52 +1,51 @@
 import re
-import tkinter as tk
-from tkinter import messagebox
+from tkinter import *
 
 
 def check_password_strength(password):
 
-    # Initialize the strength score
+    # Initialize the strength score & feedback
     strength = 0
     feedback = []  
     
     # Length check
     length = len(password)
     if length < 8:
-        feedback.append("\nPassword is too short. Minimum length is 8 characters.")
+        feedback.append("Password is too short. Minimum length is 8 characters.")
     elif length > 12:
         strength += 2
-        feedback.append("\nPassword length is good.")
+        feedback.append("Password length is good.")
     else:
         strength += 1
-        feedback.append("\nPassword length is acceptable.")
+        feedback.append("Password length is acceptable.")
 
     # Complexity checks
     if re.search(r"[a-z]", password):
         strength += 1
     else:
-        feedback.append("\nPassword should include at least one lowercase letter.")
+        feedback.append("Password should include at least one lowercase letter.")
 
     if re.search(r"[A-Z]", password):
         strength += 1
     else:
-        feedback.append("\nPassword should include at least one uppercase letter.")
+        feedback.append("Password should include at least one uppercase letter.")
 
     if re.search(r"[0-9]", password):
         strength += 1
     else:
-        feedback.append("\nPassword should include at least one digit.")
+        feedback.append("Password should include at least one digit.")
 
-    if re.search(r"[@$!%*?&]", password):
+    if re.search(r'[\W_]', password):
         strength += 1
     else:
-        feedback.append("\nPassword should include at least one special character like (@$!%*?&).")
+        feedback.append("Password should include at least one special character like   (@$#!%*?&).")
 
     # Uniqueness check
     if len(set(password)) / length > 0.7:
         strength += 1
-        feedback.append("\nPassword has a good level of uniqueness.")
+        feedback.append("Password has a good level of uniqueness.")
     else:
-        feedback.append("\nPassword could be more unique. So avoid using repetitive characters.")
+        feedback.append("Password could be more unique. Avoid repetitive characters.")
 
     # Strength rating
     final_feedback = ""
@@ -61,7 +60,7 @@ def check_password_strength(password):
     else:
         final_feedback = "Very Strong"
     
-    return strength, feedback, final_feedback
+    return feedback, final_feedback
     
 # Function to toggle the visibility of the password in the entry widget.
 def toggle_password_visibility():
@@ -73,28 +72,45 @@ def toggle_password_visibility():
         password_entry.config(show="")
         visibility_button.config(text="Hide Password")
 
-def on_check_password_strength():
+# To Start
+def on_beginning():
     password = password_entry.get()
-    score = check_password_strength(password)
-    strength_label.config(text=f"Password Strength: {score}")
+    feedback, overall_feedback = check_password_strength(password)
+    feedback_output = Text(root, height=10, width=62)
+    feedback_output.pack(pady=10)
+    feedback_output.insert(END, "Password Strength Feedback :\n\n", "bold")
+    for item in feedback:
+        feedback_output.insert(END, "- " + item + "\n")
+    feedback_output.tag_configure("bold", font=("Georgia", 10, "bold" ))
+    Label(root, text=f"Overall Password is {overall_feedback}", font=("Georgia", 12, "bold" )).pack()
+    Button(root, text= "  Exit :)  ", font=("Calibri",12,"italic"), cursor="hand2", command=closing).pack(pady=60)
+
+# To Close
+def closing():
+    root.quit()
 
 # Initialize the main application window
-root = tk.Tk()
-root.title("Password Strength Checker")
-root.geometry("540x540")
+root = Tk()
+root.title("Ninja PassStrenCheck")
+root.geometry("620x640")
 
-password_label = tk.Label(root, text="Enter Password:")
-password_label.pack(pady=10)
+f1 = Frame(root, borderwidth=4, relief=SUNKEN)
+f1.pack(pady=10)
+l = Label(f1, text="Password Strength Checker Tool", font="Georgia 16 bold", pady=5, padx=5 )
+l.pack()
+f2 = Frame(root)
+f2.pack(pady=20)
 
-password_entry = tk.Entry(root, show="*", width=30)
-password_entry.pack(pady=10)
+password_label = Label(f2, text="Enter Password:", font="Georgia 12")
+password_label.pack(padx=10, side=LEFT, )
 
-visibility_button = tk.Button(root, text="Show Password", command=toggle_password_visibility)
-visibility_button.pack(pady=5)
+password_entry = Entry(f2, show="*", width=30,font=("Times", 14 ))
+password_entry.pack(side=LEFT,padx=15, pady=10 )
 
-check_button = tk.Button(root, text="Check Strength", command=on_check_password_strength)
-check_button.pack(pady=10)
+visibility_button = Button(f2, text="Show Password", cursor="hand2", command=toggle_password_visibility)
+visibility_button.pack(side=LEFT, padx=10)
 
-strength_label = tk.Label(root, text="", font=("Helvetica", 12))
-strength_label.pack(pady=10)
+check_button = Button(root, text="Check Strength", font=("Arial", 12), cursor="hand2", activebackground="Black", activeforeground="White", command=on_beginning)
+check_button.pack(pady=30)
+
 root.mainloop()
