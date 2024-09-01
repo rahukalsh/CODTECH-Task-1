@@ -8,8 +8,8 @@ Mentor : Muzammil Ahmed
 ```
 # Overview Of The Project : PASSWORD STRENGTH CHECKER TOOL
 
-![Screenshot (479)](https://github.com/user-attachments/assets/61d71a4e-4957-413a-9653-24da7471792a)
 ![Screenshot (477)](https://github.com/user-attachments/assets/ce515517-5c6c-4ef0-804c-603f6f2a712a)
+![Screenshot (479)](https://github.com/user-attachments/assets/61d71a4e-4957-413a-9653-24da7471792a)
 ![Screenshot (480)](https://github.com/user-attachments/assets/28d01244-280d-401c-9623-888c70a9ffdd)
 
 ## Objective
